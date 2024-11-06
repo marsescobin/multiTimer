@@ -122,7 +122,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Multi-timer</h1>
+      <h1>EJ's Multi-timer App</h1>
       <div>
         <button className="btn-primary" onClick={() => setShowForm(true)}>
           Add a timer
