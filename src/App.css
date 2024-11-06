@@ -100,7 +100,3 @@ td {
 }
 
 /* Ensure button colors are enforced */
-
-.btn-danger {
-  background-color: #dc3545 !important;
-}
