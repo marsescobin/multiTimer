@@ -41,37 +41,69 @@ form input:focus {
 
 /* Base button styles */
 button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-color: transparent;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   margin: 0 5px;
   color: white;
-}
-
-/* Disable tap highlight color on mobile */
-button {
-  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 /* Primary button - Blue */
 .btn-primary {
-  background-color: #007bff !important;
+  background-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
 }
 
 .btn-primary:hover {
   background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Success button - Green */
+.btn-success {
+  background-color: #28a745;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
 /* Warning button - Yellow/Orange */
+.btn-warning {
+  background-color: #ffc107;
+  color: #000;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.2);
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
 
 /* Danger button - Red */
+.btn-danger {
+  background-color: #dc3545;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Active/Pressed state for all buttons */
+button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
 
 /* Form submit button */
 button[type="submit"] {
