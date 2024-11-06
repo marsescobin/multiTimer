@@ -69,23 +69,36 @@ function App() {
     setTimers((prevTimers) =>
       prevTimers.map((timer) => {
         if (timer.id === id) {
+          const startTime = Date.now();
+          const initialTimeLeft = timer.timeLeft;
+
           const intervalId = setInterval(() => {
             setTimers((prevTimers) => {
               return prevTimers.map((t) => {
-                if (t.id === id && t.timeLeft > 0) {
-                  // Check for 5-minute mark
-                  if (t.timeLeft === 300 && !fiveMinWarned.has(id)) {
+                if (t.id === id) {
+                  const elapsedSeconds = Math.floor(
+                    (Date.now() - startTime) / 1000
+                  );
+                  const newTimeLeft = Math.max(
+                    initialTimeLeft - elapsedSeconds,
+                    0
+                  );
+
+                  if (newTimeLeft === 0) {
+                    clearInterval(intervalId);
+                    if (!alarmedTimers.has(id)) {
+                      endSound.play();
+                      setAlarmedTimers((prev) => new Set(prev).add(id));
+                    }
+                    return { ...t, timeLeft: newTimeLeft, isRunning: false };
+                  }
+
+                  if (newTimeLeft === 300 && !fiveMinWarned.has(id)) {
                     fiveMinSound.play();
                     setFiveMinWarned((prev) => new Set(prev).add(id));
                   }
-                  return { ...t, timeLeft: t.timeLeft - 1 };
-                } else if (t.id === id && t.timeLeft === 0) {
-                  clearInterval(intervalId);
-                  if (!alarmedTimers.has(id)) {
-                    endSound.play();
-                    setAlarmedTimers((prev) => new Set(prev).add(id));
-                  }
-                  return { ...t, isRunning: false };
+
+                  return { ...t, timeLeft: newTimeLeft };
                 }
                 return t;
               });
@@ -266,7 +279,8 @@ function App() {
                     : "-"}
                 </td>
                 <td>
-                  {timer.timeLeft === 300 && !fiveMinWarned.has(timer.id) && (
+                  {/* Show stop button for 5-min warning */}
+                  {timer.timeLeft <= 300 && !fiveMinWarned.has(timer.id) && (
                     <button
                       className="btn-warning"
                       onClick={() =>
@@ -276,6 +290,7 @@ function App() {
                       Stop 5-min Alarm
                     </button>
                   )}
+                  {/* Show stop button for end alarm */}
                   {timer.timeLeft === 0 && !alarmedTimers.has(timer.id) && (
                     <button
                       className="btn-warning"
