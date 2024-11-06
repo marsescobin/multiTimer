@@ -100,13 +100,6 @@ td {
 }
 
 /* Ensure button colors are enforced */
-.btn-success {
-  background-color: #28a745 !important;
-}
-
-.btn-warning {
-  background-color: #ffc107 !important;
-}
 
 .btn-danger {
   background-color: #dc3545 !important;
