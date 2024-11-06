@@ -129,7 +129,7 @@ function App() {
         </button>
         {timers.length > 0 && (
           <button className="btn-danger" onClick={handleClearAll}>
-            Clear All
+            Delete all timers
           </button>
         )}
       </div>

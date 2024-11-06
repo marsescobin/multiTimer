@@ -100,3 +100,20 @@ button[type="submit"] {
 button[type="submit"]:hover {
   background-color: #0056b3;
 }
+
+table {
+  border-spacing: 0 0; /* horizontal vertical */
+  border-collapse: separate;
+  width: 100%;
+}
+
+th {
+  padding: 12px 20px; /* vertical horizontal */
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 12px 20px;
+  text-align: left;
+}
