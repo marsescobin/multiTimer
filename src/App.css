@@ -41,6 +41,10 @@ form input:focus {
 
 /* Base button styles */
 button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -51,9 +55,14 @@ button {
   color: white;
 }
 
+/* Disable tap highlight color on mobile */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Primary button - Blue */
 .btn-primary {
-  background-color: #007bff;
+  background-color: #007bff !important;
 }
 
 .btn-primary:hover {
@@ -88,4 +97,17 @@ th {
 td {
   padding: 12px 20px;
   text-align: left;
+}
+
+/* Ensure button colors are enforced */
+.btn-success {
+  background-color: #28a745 !important;
+}
+
+.btn-warning {
+  background-color: #ffc107 !important;
+}
+
+.btn-danger {
+  background-color: #dc3545 !important;
 }
