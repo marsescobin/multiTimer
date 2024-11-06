@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import fiveMinAudio from "./assets/5min.wav";
+import endAudio from "./assets/0min.wav";
 
 function App() {
   const [showForm, setShowForm] = useState(false);
@@ -29,11 +31,16 @@ function App() {
     }
     return [];
   });
+
   const [formData, setFormData] = useState({
     studentName: "",
     examName: "",
     duration: "",
   });
+  const [alarmedTimers, setAlarmedTimers] = useState(new Set());
+  const [fiveMinWarned, setFiveMinWarned] = useState(new Set());
+  const [endSound] = useState(() => new Audio(endAudio));
+  const [fiveMinSound] = useState(() => new Audio(fiveMinAudio));
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -66,9 +73,18 @@ function App() {
             setTimers((prevTimers) => {
               return prevTimers.map((t) => {
                 if (t.id === id && t.timeLeft > 0) {
+                  // Check for 5-minute mark
+                  if (t.timeLeft === 300 && !fiveMinWarned.has(id)) {
+                    fiveMinSound.play();
+                    setFiveMinWarned((prev) => new Set(prev).add(id));
+                  }
                   return { ...t, timeLeft: t.timeLeft - 1 };
                 } else if (t.id === id && t.timeLeft === 0) {
                   clearInterval(intervalId);
+                  if (!alarmedTimers.has(id)) {
+                    endSound.play();
+                    setAlarmedTimers((prev) => new Set(prev).add(id));
+                  }
                   return { ...t, isRunning: false };
                 }
                 return t;
@@ -90,6 +106,8 @@ function App() {
       }
     });
     setTimers([]);
+    setAlarmedTimers(new Set());
+    setFiveMinWarned(new Set());
   };
 
   const handlePause = (id) => {
@@ -112,6 +130,16 @@ function App() {
       if (timerToDelete?.intervalId) {
         clearInterval(timerToDelete.intervalId);
       }
+      setAlarmedTimers((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+      setFiveMinWarned((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
       return prevTimers.filter((timer) => timer.id !== id);
     });
   };
@@ -122,7 +150,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>EJ's Multi-timer App</h1>
+      <h1>EJ&apos;s Multi-timer App</h1>
       <div>
         <button className="btn-primary" onClick={() => setShowForm(true)}>
           Add a timer
@@ -176,6 +204,7 @@ function App() {
               <th>Duration</th>
               <th>Action</th>
               <th>Time Left</th>
+              <th>Alarm</th>
             </tr>
           </thead>
           <tbody>
@@ -224,11 +253,39 @@ function App() {
                   )}
                 </td>
                 <td
-                  style={{ color: timer.timeLeft <= 300 ? "red" : "inherit" }}
+                  style={{
+                    color: timer.timeLeft <= 300 ? "red" : "inherit",
+                    animation:
+                      timer.timeLeft === 0 && !alarmedTimers.has(timer.id)
+                        ? "flash 1s infinite"
+                        : "none",
+                  }}
                 >
                   {timer.isRunning || timer.timeLeft < timer.duration * 60
                     ? formatTime(timer.timeLeft)
                     : "-"}
+                </td>
+                <td>
+                  {timer.timeLeft === 300 && !fiveMinWarned.has(timer.id) && (
+                    <button
+                      className="btn-warning"
+                      onClick={() =>
+                        setFiveMinWarned((prev) => new Set(prev).add(timer.id))
+                      }
+                    >
+                      Stop 5-min Alarm
+                    </button>
+                  )}
+                  {timer.timeLeft === 0 && !alarmedTimers.has(timer.id) && (
+                    <button
+                      className="btn-warning"
+                      onClick={() =>
+                        setAlarmedTimers((prev) => new Set(prev).add(timer.id))
+                      }
+                    >
+                      Stop End Alarm
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
