@@ -98,7 +98,7 @@ function App() {
                     setFiveMinWarned((prev) => new Set(prev).add(id));
                   }
 
-                  return { ...t, timeLeft: newTimeLeft };
+                  return { ...t, timeLeft: newTimeLeft, isRunning: true };
                 }
                 return t;
               });
